@@ -3,23 +3,55 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Megagen — Legal</title>
+<title>MEGAGEN — one-tap degen baskets on Solana</title>
 <style>
   :root { color-scheme: dark; }
-  body { margin:0; min-height:100vh; background:#070509; color:#E9E3F5; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; display:flex; align-items:center; justify-content:center; }
-  .c { text-align:center; padding:40px 22px; }
-  .brand { font-weight:900; letter-spacing:1px; font-size:34px; margin-bottom:8px; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; background: radial-gradient(120% 80% at 50% 0%, #0B0518 0%, #070509 55%, #0A0712 100%); color:#F4EEFF; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; overflow-x:hidden; }
+  /* rotating sunburst rays, like the app */
+  .rays { position:fixed; inset:-60%; z-index:0; pointer-events:none; opacity:.55;
+    background: conic-gradient(from 0deg,
+      rgba(124,255,61,.12) 0deg 7deg, transparent 7deg 24deg,
+      rgba(168,85,255,.10) 24deg 31deg, transparent 31deg 48deg,
+      rgba(27,255,155,.12) 48deg 55deg, transparent 55deg 72deg);
+    -webkit-mask: radial-gradient(closest-side, #000 0%, transparent 78%);
+            mask: radial-gradient(closest-side, #000 0%, transparent 78%);
+    animation: spin 60s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .wrap { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:56px 22px 70px; text-align:center; }
+  .mark { width:64px; height:64px; }
+  .brand { font-weight:900; letter-spacing:1px; font-size:40px; margin:14px 0 6px; }
   .brand .g { color:#7CFF3D; }
-  p { color:#9A8FB5; }
-  a { display:block; margin:14px auto; max-width:320px; padding:14px 18px; border-radius:14px; border:1.5px solid rgba(168,85,255,.5); color:#C77DFF; text-decoration:none; font-weight:800; }
+  .tag { color:#B6ACD2; font-size:16px; line-height:1.5; margin:0 0 26px; }
+  .phone { width:300px; max-width:82%; border-radius:34px; border:8px solid #15101f; box-shadow:0 24px 70px rgba(27,255,155,.18), 0 8px 30px rgba(0,0,0,.6); display:block; margin:0 auto 34px; }
+  .btns { display:flex; flex-direction:column; gap:14px; max-width:340px; margin:0 auto; }
+  .btn { display:block; padding:16px 18px; border-radius:16px; text-decoration:none; font-weight:800; font-size:15px; }
+  .btn.primary { background:linear-gradient(135deg,#1BFF9B,#13C77A); color:#05130D; }
+  .btn.ghost { border:1.5px solid rgba(168,85,255,.5); color:#C77DFF; }
+  .foot { color:#8C82A8; font-size:12px; margin-top:34px; line-height:1.6; }
+  .foot a { color:#8C82A8; }
 </style>
 </head>
 <body>
-  <div class="c">
+  <div class="rays"></div>
+  <div class="wrap">
+    <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+      <defs><linearGradient id="b" x1="3" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#1BFF9B"/><stop offset=".5" stop-color="#3AD7C6"/><stop offset="1" stop-color="#B06BFF"/>
+      </linearGradient></defs>
+      <path d="M13.8 1.6 L4.2 13.4 L10.2 13.4 L9.2 22.4 L20 9.6 L13.4 9.6 Z" fill="url(#b)"/>
+    </svg>
     <div class="brand">MEGA<span class="g">GEN</span></div>
-    <p>One-tap degen baskets on Solana.</p>
-    <a href="terms.html">Terms of Use</a>
-    <a href="privacy.html">Privacy Policy</a>
+    <p class="tag">One-tap degen baskets on Solana.<br/>3 coins picked by a formula, not a coin flip.</p>
+
+    <img class="phone" src="screenshot.png" alt="Megagen app screenshot" />
+
+    <div class="btns">
+      <a class="btn primary" href="terms.html">Terms of Use</a>
+      <a class="btn ghost" href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <p class="foot">Megagen is an independent, non-custodial app for the Solana Seeker.<br/>High risk · self-custody · not financial advice.<br/>Contact: <a href="mailto:cismytb@gmail.com">cismytb@gmail.com</a></p>
   </div>
 </body>
 </html>
