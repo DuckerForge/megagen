@@ -1,56 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MEGAGEN — one-tap degen baskets on Solana</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MEGAGEN — one-tap Solana baskets for the Seeker</title>
+<meta name="description" content="MEGAGEN — pick an amount and a risk level, tap once, own a vetted 3-token Solana basket swapped via Jupiter. Non-custodial, for the Solana Seeker."/>
+<meta name="theme-color" content="#1BFF9B"/>
+<meta property="og:title" content="MEGAGEN — one-tap Solana baskets"/>
+<meta property="og:description" content="One tap. A whole basket of Solana degens. For the Solana Seeker."/>
+<meta property="og:image" content="https://duckerforge.github.io/icons/megagen.png"/>
+<link rel="icon" type="image/png" href="https://duckerforge.github.io/icons/megagen.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
 <style>
-  :root { color-scheme: dark; }
-  * { box-sizing: border-box; }
-  body { margin:0; min-height:100vh; background: radial-gradient(120% 80% at 50% 0%, #0B0518 0%, #070509 55%, #0A0712 100%); color:#F4EEFF; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; overflow-x:hidden; }
-  /* rotating sunburst rays, like the app */
-  .rays { position:fixed; inset:-60%; z-index:0; pointer-events:none; opacity:.55;
-    background: repeating-conic-gradient(from 0deg,
-      rgba(27,255,155,.14) 0deg 6deg, transparent 6deg 15deg,
-      rgba(168,85,255,.11) 15deg 19deg, transparent 19deg 30deg);
-    -webkit-mask: radial-gradient(closest-side, #000 0%, transparent 78%);
-            mask: radial-gradient(closest-side, #000 0%, transparent 78%);
-    animation: spin 60s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .wrap { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:56px 22px 70px; text-align:center; }
-  .mark { width:64px; height:64px; }
-  .brand { font-weight:900; letter-spacing:1px; font-size:40px; margin:14px 0 6px; }
-  .brand .g { color:#7CFF3D; }
-  .tag { color:#B6ACD2; font-size:16px; line-height:1.5; margin:0 0 26px; }
-  .phone { width:300px; max-width:82%; border-radius:34px; border:8px solid #15101f; box-shadow:0 24px 70px rgba(27,255,155,.18), 0 8px 30px rgba(0,0,0,.6); display:block; margin:0 auto 34px; }
-  .btns { display:flex; flex-direction:column; gap:14px; max-width:340px; margin:0 auto; }
-  .btn { display:block; padding:16px 18px; border-radius:16px; text-decoration:none; font-weight:800; font-size:15px; }
-  .btn.primary { background:linear-gradient(135deg,#1BFF9B,#13C77A); color:#05130D; }
-  .btn.ghost { border:1.5px solid rgba(168,85,255,.5); color:#C77DFF; }
-  .foot { color:#8C82A8; font-size:12px; margin-top:34px; line-height:1.6; }
-  .foot a { color:#8C82A8; }
+:root{--orange:#1BFF9B;--orange-soft:rgba(27,255,155,.14);--mg-purple:#C77DFF}
+.grad{background:linear-gradient(100deg,#1BFF9B,#C77DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pill__dot{background:#1BFF9B}
+.langsel{background:var(--card);color:var(--txt);border:1px solid var(--line-solid);border-radius:12px;padding:8px 12px;font:600 13px Inter,sans-serif;cursor:pointer}
+/* MEGAGEN phone mockup UI */
+.mg-screen{display:flex;flex-direction:column;gap:10px;padding:12px}
+.mg-bar{display:flex;align-items:center;gap:8px;font:700 14px 'Space Grotesk',sans-serif}
+.mg-bar img{width:24px;height:24px;border-radius:7px}
+.mg-bar .gn{background:linear-gradient(100deg,#1BFF9B,#C77DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mg-risks{display:flex;gap:7px}
+.mg-risk{flex:1;text-align:center;padding:9px 4px;border-radius:13px;background:#16121f;border:1px solid #262634;font:800 11px Inter;color:#9a9aab}
+.mg-risk.on{border-color:#FFD23F;color:#FFD23F;background:rgba(255,210,63,.08)}
+.mg-risk .e{font-size:18px;display:block;margin-bottom:3px}
+.mg-amt{background:#16121f;border:1px solid #262634;border-radius:14px;padding:12px 14px;display:flex;align-items:baseline;gap:8px}
+.mg-amt b{font:800 26px 'Space Grotesk';color:#f4f4f8}.mg-amt span{font:700 12px Inter;color:#9a9aab;margin-left:auto}
+.mg-bust{background:linear-gradient(135deg,#1BFF9B,#13C77A);color:#05130D;border:none;border-radius:15px;padding:14px;font:900 16px 'Space Grotesk';letter-spacing:.5px;box-shadow:0 8px 26px rgba(27,255,155,.32)}
+.mg-basket{display:flex;flex-direction:column;gap:6px}
+.mg-tok{display:flex;align-items:center;gap:9px;background:#16121f;border:1px solid #262634;border-left:3px solid var(--bl);border-radius:12px;padding:8px 10px}
+.mg-tok .d{width:26px;height:26px;border-radius:50%;background:#241934;display:grid;place-items:center;font:900 12px Inter;color:#fff}
+.mg-tok .nm{font:800 12px Inter;color:#f4f4f8}.mg-tok .pc{margin-left:auto;font:800 12px Inter}
 </style>
-</head>
-<body>
-  <div class="rays"></div>
-  <div class="wrap">
-    <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
-      <defs><linearGradient id="b" x1="3" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#1BFF9B"/><stop offset=".5" stop-color="#3AD7C6"/><stop offset="1" stop-color="#B06BFF"/>
-      </linearGradient></defs>
-      <path d="M13.8 1.6 L4.2 13.4 L10.2 13.4 L9.2 22.4 L20 9.6 L13.4 9.6 Z" fill="url(#b)"/>
-    </svg>
-    <div class="brand">MEGA<span class="g">GEN</span></div>
-    <p class="tag">One-tap degen baskets on Solana.<br/>3 coins picked by a formula, not a coin flip.</p>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head><body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow bg-glow--1" aria-hidden="true"></div>
+<div class="bg-glow bg-glow--2" aria-hidden="true"></div>
 
-    <img class="phone" src="screenshot.png" alt="Megagen app screenshot" />
+<header class="nav" id="top">
+  <a class="nav__brand" href="#top"><img src="https://duckerforge.github.io/icons/megagen.png" alt="" class="nav__logo"/><span class="nav__name">MEGAGEN</span></a>
+  <nav class="nav__links" aria-label="Primary"><a href="#how" id="nHow"></a><a href="#risk" id="nRisk"></a><a href="#features" id="nFeat"></a></nav>
+  <select class="langsel" id="langSel" aria-label="Language"></select>
+</header>
 
-    <div class="btns">
-      <a class="btn primary" href="terms.html">Terms of Use</a>
-      <a class="btn ghost" href="privacy.html">Privacy Policy</a>
+<main>
+  <section class="hero">
+    <div class="hero__copy reveal">
+      <span class="pill"><span class="pill__dot"></span><span id="store"></span></span>
+      <h1 class="hero__title">One tap.<br/>A whole <span class="grad">basket</span>.</h1>
+      <p class="hero__sub" id="sub"></p>
+      <div class="hero__cta"><a class="btn btn--primary btn--lg" href="#how"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M5 3l14 9-14 9z"/></svg><span id="ctaHow"></span></a>
+      <a class="btn btn--ghost btn--lg" href="#risk" id="ctaRisk"></a></div>
+      <ul class="hero__trust"><li><strong>Non-custodial</strong></li><li><strong>Jupiter</strong> routed</li><li><strong>7 languages</strong></li></ul>
     </div>
-
-    <p class="foot">Megagen is an independent, non-custodial app for the Solana Seeker.<br/>High risk · self-custody · not financial advice.<br/>Contact: <a href="mailto:infernaytb@gmail.com">infernaytb@gmail.com</a></p>
+    <div class="hero__device reveal">
+<div class="phone phone--hero">
+  <div class="phone__notch"></div>
+  <div class="phone__screen mg-screen">
+    <div class="mg-bar"><img src="https://duckerforge.github.io/icons/megagen.png" alt=""/>MEGA<span class="gn">GEN</span></div>
+    <div class="mg-risks"><div class="mg-risk"><span class="e">🌶️</span>Spicy</div><div class="mg-risk on"><span class="e">🎲</span>Degen</div><div class="mg-risk"><span class="e">💀</span>Full Send</div></div>
+    <div class="mg-amt"><b>0.50</b><span>SOL</span></div>
+    <button class="mg-bust">⚡ BUST</button>
+    <div class="mg-basket">
+      <div class="mg-tok" style="--bl:#1BFF9B"><div class="d">W</div><div class="nm">WIF</div><div class="pc" style="color:#1BFF9B">+42%</div></div>
+      <div class="mg-tok" style="--bl:#FFD23F"><div class="d">P</div><div class="nm">POPCAT</div><div class="pc" style="color:#1BFF9B">+18%</div></div>
+      <div class="mg-tok" style="--bl:#FF2D78"><div class="d">B</div><div class="nm">BONK</div><div class="pc" style="color:#FF2D78">-7%</div></div>
+    </div>
   </div>
-</body>
-</html>
+</div>
+<div class="device-glow" aria-hidden="true"></div>
+</div>
+  </section>
+
+  <section class="strip" aria-label="Highlights">
+    <div class="strip__item"><b>1 tap</b><span>3-token basket</span></div>
+    <div class="strip__item"><b>0 custody</b><span>Wallet stays yours</span></div>
+    <div class="strip__item"><b>1%</b><span>flat fee per buy</span></div>
+    <div class="strip__item"><b>Jupiter</b><span>best-route swaps</span></div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="section__head reveal"><span class="eyebrow" id="howK"></span><h2 id="howT"></h2><p id="howL"></p></div>
+    <ol class="steps" id="steps"></ol>
+  </section>
+
+  <section class="section" id="risk">
+    <div class="section__head reveal"><span class="eyebrow" id="riskK"></span><h2 id="riskT"></h2><p id="riskL"></p></div>
+    <div class="grid" id="risks"></div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section__head reveal"><span class="eyebrow" id="featK"></span><h2 id="featT"></h2></div>
+    <div class="grid" id="feats"></div>
+  </section>
+
+  <section class="cta" id="download">
+    <div class="cta__inner reveal"><img src="https://duckerforge.github.io/icons/megagen.png" alt="MEGAGEN" class="cta__logo"/>
+      <h2 id="legalT"></h2><p id="legalL"></p>
+      <div class="cta__btns"><a class="btn btn--ghost btn--lg" href="terms.html">📜 <span id="termsB"></span></a><a class="btn btn--ghost btn--lg" href="privacy.html">🔒 <span id="privacyB"></span></a></div>
+      <p class="cta__fine">app.megagen · Solana Mainnet · Non-custodial</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__brand"><img src="https://duckerforge.github.io/icons/megagen.png" alt="" class="footer__logo"/><div><b>MEGAGEN</b><span>built solo by DuckerForge</span></div></div>
+  <nav class="footer__links"><a href="https://duckerforge.github.io/">DuckerForge</a><a href="https://x.com/DuckerForge" target="_blank" rel="noopener">X</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></nav>
+  <p class="footer__copy">© 2026 DuckerForge · Built for the Solana Seeker</p>
+</footer>
+<script>
+var I18N={"en": {"ui": {"tag": "One tap. A whole basket of Solana degens.", "sub": "Pick an amount and a risk level. Tap once. MEGAGEN assembles a vetted 3-token Solana basket and swaps it via Jupiter — straight from your own wallet.", "store": "On the Solana dApp Store · for Solana Seeker", "ctaHow": "How it works", "ctaRisk": "Risk & safety", "howKicker": "How it works", "howTitle": "Three taps from SOL to a basket", "howLead": "No charts to read, no twenty swaps to approve. MEGAGEN does the picking and the swapping — and you keep custody the whole time.", "riskKicker": "Risk levels", "riskTitle": "You set the chaos", "riskLead": "Every level draws from a pool screened for basic safety — liquidity, holder spread, on-chain risk flags — looser as the risk goes up.", "featKicker": "Why MEGAGEN", "featTitle": "Built like a tool, not a casino skin", "legalKicker": "Good to know", "legalTitle": "Crypto is risky", "legalLead": "MEGAGEN buys real, volatile tokens with your own funds. It is a fun tool, not financial advice — only spend what you can afford to lose.", "terms": "Terms of Use", "privacy": "Privacy Policy", "contact": "Contact", "rights": "One-tap Solana baskets for the Solana Seeker dApp Store"}, "steps": [{"h": "Pick your amount & risk", "p": "Choose how much SOL to spend and a risk level — Spicy, Degen, or Full Send."}, {"h": "One tap to BUST", "p": "MEGAGEN assembles a 3-token basket from a freshly vetted pool and signs every swap in a single wallet approval."}, {"h": "Own the basket", "p": "The tokens land in your wallet via Jupiter. Track them, reroll picks you don't like, or sell anytime."}], "risks": [{"n": "Spicy", "p": "Established movers with real momentum. The calmer end of degen."}, {"n": "Degen", "p": "Trending small caps. The classic one-tap memecoin basket."}, {"n": "Full Send", "p": "Micro caps and fresh launches. Maximum chaos — mostly zeros, the odd moonshot."}], "features": [{"h": "Non-custodial", "p": "Connects through the Mobile Wallet Adapter. Your keys, your coins — MEGAGEN never holds your funds."}, {"h": "Vetted picks", "p": "Tokens are filtered for liquidity, holder concentration and on-chain risk before they reach a basket."}, {"h": "Best-route swaps", "p": "Every leg routes through the Jupiter aggregator for deep liquidity and fair pricing."}, {"h": "Reroll & control", "p": "Don't like a pick? Swap one slot or reshuffle the whole basket before you buy — instantly."}, {"h": "Portfolio & sell", "p": "Track every basket and cash out in a tap — P&L, win-rate and your best setups, right on device."}, {"h": "1% fee, that's it", "p": "A small 1% platform fee on each buy supports development. No subscriptions, no hidden costs."}]}, "de": {"ui": {"tag": "Ein Tap. Ein ganzer Korb voller Solana-Degens.", "sub": "Betrag und Risiko wählen. Einmal tappen. MEGAGEN stellt einen geprüften Solana-Korb aus 3 Token zusammen und swappt ihn über Jupiter — direkt aus deiner eigenen Wallet.", "store": "Im Solana dApp Store · für Solana Seeker", "ctaHow": "So funktioniert's", "ctaRisk": "Risiko & Sicherheit", "howKicker": "So funktioniert's", "howTitle": "Drei Taps von SOL zum Korb", "howLead": "Keine Charts lesen, keine zwanzig Swaps bestätigen. MEGAGEN übernimmt das Picken und Swappen — und du behältst die ganze Zeit die Kontrolle.", "riskKicker": "Risikostufen", "riskTitle": "Du bestimmst das Chaos", "riskLead": "Jede Stufe zieht aus einem Pool, der auf Basis-Sicherheit geprüft ist — Liquidität, Holder-Verteilung, On-Chain-Risikoflags — lockerer, je höher das Risiko.", "featKicker": "Warum MEGAGEN", "featTitle": "Gebaut wie ein Tool, nicht wie ein Casino-Skin", "legalKicker": "Gut zu wissen", "legalTitle": "Krypto ist riskant", "legalLead": "MEGAGEN kauft echte, volatile Token mit deinem eigenen Geld. Es ist ein spaßiges Tool, keine Finanzberatung — gib nur aus, was du dir leisten kannst zu verlieren.", "terms": "Nutzungsbedingungen", "privacy": "Datenschutzerklärung", "contact": "Kontakt", "rights": "One-Tap-Solana-Körbe für den Solana dApp Store"}, "steps": [{"h": "Betrag & Risiko wählen", "p": "Leg fest, wie viel SOL du ausgeben willst, und wähle ein Risiko — Spicy, Degen oder Full Send."}, {"h": "Ein Tap zum BUST", "p": "MEGAGEN stellt einen Korb aus 3 Token aus einem frisch geprüften Pool zusammen und signiert jeden Swap mit einer einzigen Wallet-Bestätigung."}, {"h": "Der Korb gehört dir", "p": "Die Token landen über Jupiter in deiner Wallet. Behalte sie im Blick, würfle Picks neu, die dir nicht gefallen, oder verkaufe jederzeit."}], "risks": [{"n": "Spicy", "p": "Etablierte Mover mit echtem Momentum. Das ruhigere Ende von Degen."}, {"n": "Degen", "p": "Trendende Small Caps. Der klassische One-Tap-Memecoin-Korb."}, {"n": "Full Send", "p": "Micro Caps und frische Launches. Maximales Chaos — meistens Nullnummern, ab und zu ein Moonshot."}], "features": [{"h": "Non-Custodial", "p": "Verbindet sich über den Mobile Wallet Adapter. Deine Keys, deine Coins — MEGAGEN hält dein Geld nie."}, {"h": "Geprüfte Picks", "p": "Token werden auf Liquidität, Holder-Konzentration und On-Chain-Risiko gefiltert, bevor sie in einen Korb kommen."}, {"h": "Best-Route-Swaps", "p": "Jeder Swap läuft über den Jupiter-Aggregator — für tiefe Liquidität und faire Preise."}, {"h": "Reroll & Kontrolle", "p": "Ein Pick gefällt dir nicht? Tausch einen Slot oder mische den ganzen Korb neu, bevor du kaufst — sofort."}, {"h": "Portfolio & Verkauf", "p": "Behalte jeden Korb im Blick und cash mit einem Tap aus — P&L, Win-Rate und deine besten Setups, direkt auf dem Gerät."}, {"h": "1% Gebühr, mehr nicht", "p": "Eine kleine Plattformgebühr von 1% pro Kauf unterstützt die Entwicklung. Keine Abos, keine versteckten Kosten."}]}, "es": {"ui": {"tag": "Un toque. Una cesta entera de degens de Solana.", "sub": "Elige una cantidad y un nivel de riesgo. Toca una vez. MEGAGEN te monta una cesta verificada de 3 tokens de Solana y la intercambia vía Jupiter — directo desde tu propia wallet.", "store": "En la Solana dApp Store · para Solana Seeker", "ctaHow": "Cómo funciona", "ctaRisk": "Riesgo y seguridad", "howKicker": "Cómo funciona", "howTitle": "Tres toques de SOL a una cesta", "howLead": "Sin gráficos que leer, sin veinte swaps que aprobar. MEGAGEN elige e intercambia por ti — y tú mantienes la custodia todo el rato.", "riskKicker": "Niveles de riesgo", "riskTitle": "Tú marcas el caos", "riskLead": "Cada nivel tira de un pool filtrado por seguridad básica — liquidez, reparto de holders, señales de riesgo on-chain — más laxo a medida que sube el riesgo.", "featKicker": "Por qué MEGAGEN", "featTitle": "Hecho como una herramienta, no como un casino disfrazado", "legalKicker": "Bueno saberlo", "legalTitle": "El cripto es arriesgado", "legalLead": "MEGAGEN compra tokens reales y volátiles con tus propios fondos. Es una herramienta divertida, no asesoramiento financiero — gasta solo lo que puedas permitirte perder.", "terms": "Términos de uso", "privacy": "Política de privacidad", "contact": "Contacto", "rights": "Cestas de Solana de un solo toque para la Solana Seeker dApp Store"}, "steps": [{"h": "Elige cantidad y riesgo", "p": "Decide cuánto SOL gastar y un nivel de riesgo — Spicy, Degen o Full Send."}, {"h": "Un toque para BUST", "p": "MEGAGEN monta una cesta de 3 tokens desde un pool recién verificado y firma cada swap con una sola aprobación de la wallet."}, {"h": "La cesta es tuya", "p": "Los tokens aterrizan en tu wallet vía Jupiter. Síguelos, vuelve a tirar los que no te gusten o vende cuando quieras."}], "risks": [{"n": "Spicy", "p": "Valores consolidados con impulso real. El lado más tranquilo del degen."}, {"n": "Degen", "p": "Small caps en tendencia. La clásica cesta de memecoins de un solo toque."}, {"n": "Full Send", "p": "Micro caps y lanzamientos recién salidos. Caos máximo — casi todo ceros, algún que otro pelotazo."}], "features": [{"h": "Sin custodia", "p": "Conecta a través del Mobile Wallet Adapter. Tus claves, tus monedas — MEGAGEN nunca guarda tus fondos."}, {"h": "Tokens verificados", "p": "Los tokens se filtran por liquidez, concentración de holders y riesgo on-chain antes de llegar a una cesta."}, {"h": "Swaps con la mejor ruta", "p": "Cada tramo se enruta por el agregador Jupiter para máxima liquidez y precios justos."}, {"h": "Re-tira y controla", "p": "¿No te gusta una elección? Cambia una posición o baraja la cesta entera antes de comprar — al instante."}, {"h": "Portfolio y venta", "p": "Sigue cada cesta y retira con un toque — P&L, ratio de aciertos y tus mejores jugadas, directo en el dispositivo."}, {"h": "1% de comisión, y ya", "p": "Una pequeña comisión del 1% en cada compra financia el desarrollo. Sin suscripciones, sin costes ocultos."}]}, "fr": {"ui": {"tag": "Un tap. Tout un panier de degens Solana.", "sub": "Choisis un montant et un niveau de risque. Un seul tap. MEGAGEN assemble un panier Solana de 3 tokens triés sur le volet et l'achète via Jupiter — direct depuis ton propre wallet.", "store": "Sur le Solana dApp Store · pour Solana Seeker", "ctaHow": "Comment ça marche", "ctaRisk": "Risque et sécurité", "howKicker": "Comment ça marche", "howTitle": "Trois taps pour passer du SOL à un panier", "howLead": "Aucun graphique à décrypter, pas vingt swaps à valider. MEGAGEN sélectionne et swap à ta place — et tu gardes la garde de tes fonds du début à la fin.", "riskKicker": "Niveaux de risque", "riskTitle": "Tu règles le chaos", "riskLead": "Chaque niveau pioche dans un pool filtré pour la sécurité de base — liquidité, répartition des holders, signaux de risque on-chain — de plus en plus permissif à mesure que le risque monte.", "featKicker": "Pourquoi MEGAGEN", "featTitle": "Pensé comme un outil, pas comme un décor de casino", "legalKicker": "Bon à savoir", "legalTitle": "La crypto, c'est risqué", "legalLead": "MEGAGEN achète de vrais tokens volatils avec tes propres fonds. C'est un outil fun, pas un conseil financier — ne mets que ce que tu peux te permettre de perdre.", "terms": "Conditions d'utilisation", "privacy": "Politique de confidentialité", "contact": "Contact", "rights": "Des paniers Solana en un tap pour le Solana Seeker dApp Store"}, "steps": [{"h": "Choisis ton montant et ton risque", "p": "Définis combien de SOL dépenser et un niveau de risque — Spicy, Degen ou Full Send."}, {"h": "Un tap pour BUST", "p": "MEGAGEN assemble un panier de 3 tokens issus d'un pool fraîchement trié et signe chaque swap en une seule validation wallet."}, {"h": "Le panier est à toi", "p": "Les tokens atterrissent dans ton wallet via Jupiter. Suis-les, repioche les picks qui te déplaisent, ou vends quand tu veux."}], "risks": [{"n": "Spicy", "p": "Des valeurs établies avec un vrai momentum. Le côté le plus calme du degen."}, {"n": "Degen", "p": "Des small caps en tendance. Le panier memecoin classique en un tap."}, {"n": "Full Send", "p": "Micro caps et lancements tout frais. Chaos maximal — surtout des zéros, et de temps en temps un moonshot."}], "features": [{"h": "Non-custodial", "p": "Connexion via le Mobile Wallet Adapter. Tes clés, tes coins — MEGAGEN ne détient jamais tes fonds."}, {"h": "Picks triés", "p": "Les tokens sont filtrés selon la liquidité, la concentration des holders et le risque on-chain avant d'arriver dans un panier."}, {"h": "Swaps au meilleur prix", "p": "Chaque leg passe par l'agrégateur Jupiter pour une liquidité profonde et un prix juste."}, {"h": "Repioche et contrôle", "p": "Un pick ne te plaît pas ? Change un seul slot ou rebrasse tout le panier avant d'acheter — instantanément."}, {"h": "Portfolio et revente", "p": "Suis chaque panier et encaisse en un tap — P&L, win-rate et tes meilleurs setups, directement sur ton appareil."}, {"h": "1 % de frais, point final", "p": "Une petite commission de 1 % sur chaque achat finance le développement. Pas d'abonnement, pas de coûts cachés."}]}, "ja": {"ui": {"tag": "ワンタップで、Solanaデジェンの詰め合わせを丸ごと。", "sub": "金額とリスクレベルを選んでワンタップ。MEGAGENが厳選した3トークンのSolanaバスケットを組み、Jupiter経由でスワップ — すべてあなた自身のウォレットから。", "store": "Solana dApp Storeにて · Solana Seeker向け", "ctaHow": "使い方", "ctaRisk": "リスクと安全性", "howKicker": "使い方", "howTitle": "SOLからバスケットまで、たった3タップ", "howLead": "チャートを読む必要も、20回のスワップを承認する必要もなし。MEGAGENが選んでスワップ — その間ずっと、資産はあなたの手の中に。", "riskKicker": "リスクレベル", "riskTitle": "カオスはあなた次第", "riskLead": "どのレベルも、基本的な安全性 — 流動性、ホルダー分散、オンチェーンのリスクフラグ — でふるいにかけたプールから抽出。リスクが上がるほどゆるくなる。", "featKicker": "なぜMEGAGENか", "featTitle": "カジノの皮じゃない、ツールとして作った", "legalKicker": "知っておいてほしいこと", "legalTitle": "クリプトはリスキー", "legalLead": "MEGAGENはあなた自身の資金で、本物の値動きの激しいトークンを買う。これは楽しいツールであって、投資助言ではない — 失っても大丈夫な額だけを使おう。", "terms": "利用規約", "privacy": "プライバシーポリシー", "contact": "お問い合わせ", "rights": "Solana Seeker dApp Store向けのワンタップSolanaバスケット"}, "steps": [{"h": "金額とリスクを選ぶ", "p": "使うSOLの量と、リスクレベルを選択 — Spicy、Degen、Full Send。"}, {"h": "ワンタップでBUST", "p": "MEGAGENが新鮮に厳選したプールから3トークンのバスケットを組み、すべてのスワップをウォレットの一度の承認で署名。"}, {"h": "バスケットは自分のもの", "p": "トークンはJupiter経由であなたのウォレットへ。追跡したり、気に入らない銘柄を引き直したり、いつでも売却。"}], "risks": [{"n": "Spicy", "p": "実績ある値動き株に本物の勢い。デジェンの中では穏やかな方。"}, {"n": "Degen", "p": "トレンドの小型株。王道のワンタップ・ミームコインバスケット。"}, {"n": "Full Send", "p": "超小型株と新規ローンチ。カオス最大 — ほぼゼロ、たまにムーンショット。"}], "features": [{"h": "ノンカストディアル", "p": "Mobile Wallet Adapter経由で接続。鍵もコインもあなたのもの — MEGAGENが資産を預かることはない。"}, {"h": "厳選された銘柄", "p": "バスケットに入る前に、流動性・ホルダー集中度・オンチェーンリスクでトークンをフィルタリング。"}, {"h": "最適ルートのスワップ", "p": "各レッグはJupiterアグリゲーター経由で、深い流動性と公正な価格を実現。"}, {"h": "引き直し&コントロール", "p": "銘柄が気に入らない?買う前に1枠だけ入れ替えるも、バスケット全体を再シャッフルするも — 一瞬で。"}, {"h": "ポートフォリオ&売却", "p": "すべてのバスケットを追跡し、ワンタップで現金化 — 損益、勝率、ベストな構成を端末上で。"}, {"h": "手数料1%、それだけ", "p": "各購入にわずか1%のプラットフォーム手数料が開発を支える。サブスクなし、隠れたコストなし。"}]}, "ko": {"ui": {"tag": "원탭으로 끝. 솔라나 디젠 한 바구니 통째로.", "sub": "금액과 리스크 레벨만 고르세요. 한 번 탭. MEGAGEN이 검증된 3개 토큰 Solana 바스켓을 구성해 Jupiter로 스왑합니다 — 전부 내 지갑에서 바로.", "store": "Solana dApp Store에서 · Solana Seeker 전용", "ctaHow": "작동 방식", "ctaRisk": "리스크 & 안전", "howKicker": "작동 방식", "howTitle": "SOL에서 바스켓까지, 단 세 번의 탭", "howLead": "차트 볼 필요도, 스왑 스무 번 승인할 필요도 없습니다. 고르고 스왑하는 건 MEGAGEN이 — 자산 소유권은 처음부터 끝까지 당신 손에.", "riskKicker": "리스크 레벨", "riskTitle": "광기는 당신이 정한다", "riskLead": "모든 레벨은 기본 안전성 — 유동성, 홀더 분산, 온체인 리스크 플래그 — 으로 걸러낸 풀에서 뽑으며, 리스크가 올라갈수록 기준이 느슨해집니다.", "featKicker": "왜 MEGAGEN인가", "featTitle": "카지노 스킨이 아니라 진짜 툴로 만들었다", "legalKicker": "알아두세요", "legalTitle": "크립토는 위험합니다", "legalLead": "MEGAGEN은 당신의 자금으로 실제 변동성 토큰을 삽니다. 재미를 위한 툴일 뿐, 투자 조언이 아닙니다 — 잃어도 괜찮은 만큼만 쓰세요.", "terms": "이용약관", "privacy": "개인정보 처리방침", "contact": "문의", "rights": "Solana Seeker dApp Store를 위한 원탭 Solana 바스켓"}, "steps": [{"h": "금액 & 리스크 고르기", "p": "얼마나 많은 SOL을 쓸지, 그리고 리스크 레벨 — Spicy, Degen, Full Send — 을 고르세요."}, {"h": "한 번 탭으로 BUST", "p": "MEGAGEN이 갓 검증된 풀에서 3개 토큰 바스켓을 구성하고, 모든 스왑을 지갑 승인 한 번으로 서명합니다."}, {"h": "바스켓은 당신 것", "p": "토큰은 Jupiter를 통해 당신 지갑에 들어옵니다. 추적하고, 마음에 안 드는 픽은 리롤하고, 언제든 팔 수 있습니다."}], "risks": [{"n": "Spicy", "p": "진짜 모멘텀을 탄 검증된 상승주. 디젠 중에서는 점잖은 쪽."}, {"n": "Degen", "p": "뜨고 있는 스몰캡. 클래식한 원탭 밈코인 바스켓."}, {"n": "Full Send", "p": "마이크로캡과 갓 출시된 신생 토큰. 광기 최대치 — 대부분 제로, 가끔 문샷."}], "features": [{"h": "논커스터디얼", "p": "Mobile Wallet Adapter로 연결됩니다. 키도 코인도 당신 것 — MEGAGEN은 절대 당신 자금을 보유하지 않습니다."}, {"h": "검증된 픽", "p": "토큰은 바스켓에 들어오기 전 유동성, 홀더 집중도, 온체인 리스크로 걸러집니다."}, {"h": "최적 경로 스왑", "p": "모든 거래는 Jupiter 애그리게이터를 통해 깊은 유동성과 공정한 가격으로 라우팅됩니다."}, {"h": "리롤 & 컨트롤", "p": "픽이 마음에 안 드세요? 사기 전에 한 슬롯만 교체하거나 바스켓 전체를 다시 섞으세요 — 즉시."}, {"h": "포트폴리오 & 매도", "p": "모든 바스켓을 추적하고 한 번 탭으로 현금화 — 손익, 승률, 최고의 셋업까지 기기 안에서 바로."}, {"h": "수수료는 1%, 그게 다", "p": "매수마다 작은 1% 플랫폼 수수료가 개발을 지원합니다. 구독도, 숨은 비용도 없습니다."}]}, "zh": {"ui": {"tag": "一键搞定。一篮子 Solana degen。", "sub": "选金额，选风险等级，点一下。MEGAGEN 帮你组好一篮 3 个精选 Solana 代币，通过 Jupiter 一键兑换——全程从你自己的钱包出发。", "store": "上架 Solana dApp Store · 专为 Solana Seeker 打造", "ctaHow": "运作方式", "ctaRisk": "风险与安全", "howKicker": "运作方式", "howTitle": "三下点击，从 SOL 到一篮子", "howLead": "不用看 K 线，不用挨个批准二十笔兑换。挑币和兑换交给 MEGAGEN——而资产始终由你自己掌控。", "riskKicker": "风险等级", "riskTitle": "狂野程度你说了算", "riskLead": "每个等级都从经过基础安全筛查的池子里抽币——流动性、持币分散度、链上风险标记——风险越高，筛选越宽松。", "featKicker": "为什么选 MEGAGEN", "featTitle": "做成一把工具，而不是赌场皮肤", "legalKicker": "须知", "legalTitle": "加密有风险", "legalLead": "MEGAGEN 用你自己的资金买入真实、波动剧烈的代币。它是个好玩的工具，不构成投资建议——只投你输得起的钱。", "terms": "使用条款", "privacy": "隐私政策", "contact": "联系我们", "rights": "为 Solana Seeker dApp Store 打造的一键 Solana 篮子"}, "steps": [{"h": "选金额，选风险", "p": "决定要花多少 SOL，再挑一个风险等级——Spicy、Degen 或 Full Send。"}, {"h": "一键 BUST", "p": "MEGAGEN 从刚刚精选好的池子里组出一篮 3 个代币，所有兑换只需在钱包里批准一次。"}, {"h": "篮子归你所有", "p": "代币通过 Jupiter 直接进你的钱包。随时盯盘、重抽不喜欢的币，或卖出。"}], "risks": [{"n": "Spicy", "p": "有真实动能的成熟选手。degen 里最稳的那一档。"}, {"n": "Degen", "p": "正在走红的小市值币。经典的一键 meme 币篮子。"}, {"n": "Full Send", "p": "微市值和全新上线的币。混乱拉满——大多归零，偶尔起飞。"}], "features": [{"h": "非托管", "p": "通过 Mobile Wallet Adapter 连接。你的私钥，你的币——MEGAGEN 绝不碰你的资金。"}, {"h": "精选币种", "p": "代币进入篮子前，先按流动性、持币集中度和链上风险层层筛过。"}, {"h": "最优路由兑换", "p": "每一笔都经 Jupiter 聚合器路由，深度流动性，公道价格。"}, {"h": "重抽与掌控", "p": "不喜欢某个币？买入前可单独换一格，或把整篮重新洗牌——即刻完成。"}, {"h": "持仓与卖出", "p": "追踪每一个篮子，一键变现——盈亏、胜率和你最强的配置，全在手机上。"}, {"h": "只收 1% 费用", "p": "每笔买入收取 1% 平台费，用于支持开发。无订阅，无隐藏费用。"}]}},LNAMES=[{"c": "en", "n": "English"}, {"c": "de", "n": "Deutsch"}, {"c": "es", "n": "Español"}, {"c": "fr", "n": "Français"}, {"c": "ja", "n": "日本語"}, {"c": "ko", "n": "한국어"}, {"c": "zh", "n": "中文"}],FE=["\ud83d\udd12", "\u2705", "\ud83d\udca7", "\ud83c\udfb2", "\ud83d\udcca", "\u26a1"],RM=[{"em": "\ud83c\udf36\ufe0f", "c": "#C77DFF"}, {"em": "\ud83c\udfb2", "c": "#FFD23F"}, {"em": "\ud83d\udc80", "c": "#1BFF9B"}];
+function pick(){var s=localStorage.getItem('mg_lang');if(s&&I18N[s])return s;var n=(navigator.language||'en').slice(0,2).toLowerCase();return I18N[n]?n:'en';}
+var LANG=pick();
+function S(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function render(){var t=I18N[LANG];document.documentElement.lang=LANG;
+S('store',t.ui.store);S('sub',t.ui.sub);S('ctaHow',t.ui.ctaHow);S('ctaRisk',t.ui.ctaRisk);
+S('nHow',t.ui.howKicker);S('nRisk',t.ui.riskKicker);S('nFeat',t.ui.featKicker);
+S('howK',t.ui.howKicker);S('howT',t.ui.howTitle);S('howL',t.ui.howLead);
+S('riskK',t.ui.riskKicker);S('riskT',t.ui.riskTitle);S('riskL',t.ui.riskLead);
+S('featK',t.ui.featKicker);S('featT',t.ui.featTitle);
+S('legalT',t.ui.legalTitle);S('legalL',t.ui.legalLead);S('termsB',t.ui.terms);S('privacyB',t.ui.privacy);
+var st=document.getElementById('steps');st.innerHTML='';t.steps.forEach(function(s,i){var li=document.createElement('li');li.className='step reveal in';var n=document.createElement('span');n.className='step__n';n.textContent=(i+1);var h=document.createElement('h3');h.textContent=s.h;var p=document.createElement('p');p.textContent=s.p;li.appendChild(n);li.appendChild(h);li.appendChild(p);st.appendChild(li);});
+var rg=document.getElementById('risks');rg.innerHTML='';t.risks.forEach(function(r,i){var a=document.createElement('article');a.className='card reveal in';a.style.borderTop='3px solid '+RM[i].c;var ic=document.createElement('div');ic.className='card__ico';ic.textContent=RM[i].em;var h=document.createElement('h3');h.textContent=r.n;h.style.color=RM[i].c;var p=document.createElement('p');p.textContent=r.p;a.appendChild(ic);a.appendChild(h);a.appendChild(p);rg.appendChild(a);});
+var fg=document.getElementById('feats');fg.innerHTML='';t.features.forEach(function(f,i){var a=document.createElement('article');a.className='card reveal in';var ic=document.createElement('div');ic.className='card__ico';ic.textContent=FE[i]||'•';var h=document.createElement('h3');h.textContent=f.h;var p=document.createElement('p');p.textContent=f.p;a.appendChild(ic);a.appendChild(h);a.appendChild(p);fg.appendChild(a);});}
+var sel=document.getElementById('langSel');LNAMES.forEach(function(o){var op=document.createElement('option');op.value=o.c;op.textContent=o.n;if(o.c===LANG)op.selected=true;sel.appendChild(op);});
+sel.addEventListener('change',function(){LANG=sel.value;localStorage.setItem('mg_lang',LANG);render();});
+render();
+</script>
+<script src="script.js" defer></script>
+</body></html>
