@@ -41,7 +41,18 @@ h2{font-size:clamp(23px,5vw,30px);font-weight:900;letter-spacing:-.5px;margin-bo
 footer{padding:34px 0 56px;border-top:1px solid var(--hairline);text-align:center;color:var(--mute);font-size:13px}
 footer .row{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
 .hl{color:var(--text)}
+/* MEGAGEN sunburst rays (rotating) + depth */
+.rays{position:fixed;inset:-60%;z-index:0;pointer-events:none;opacity:.5;
+background:repeating-conic-gradient(from 0deg,rgba(27,255,155,.13) 0deg 6deg,transparent 6deg 15deg,rgba(168,85,255,.10) 15deg 19deg,transparent 19deg 30deg);
+-webkit-mask:radial-gradient(closest-side,#000 0%,transparent 76%);mask:radial-gradient(closest-side,#000 0%,transparent 76%);animation:spin 70s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.topbar,header.hero,section,footer,.wrap.legal{position:relative;z-index:1}
+header.hero .logo{filter:drop-shadow(0 0 38px rgba(27,255,155,.30)) drop-shadow(0 10px 34px rgba(168,85,255,.42))}
+.app{transition:border-color .15s,transform .15s,box-shadow .15s}
+.app:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(168,85,255,.12)}
+.app img{box-shadow:0 6px 18px rgba(0,0,0,.45)}
 </style></head><body>
+<div class="rays"></div>
 <div class="topbar"><a class="brand" href="https://duckerforge.github.io/megagen/"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#1BFF9B"/><stop offset="1" stop-color="#A855FF"/></linearGradient></defs><path d="M50 4 L61 35 L94 35 L67 55 L77 88 L50 68 L23 88 L33 55 L6 35 L39 35 Z" fill="url(#g)"/><circle cx="50" cy="50" r="11" fill="#070509"/><circle cx="50" cy="50" r="5.5" fill="url(#g)"/></svg><span class="gn" id="back">MEGAGEN</span></a><select id="langSel" aria-label="Language"></select></div>
 <div class="wrap legal" style="padding-top:38px;padding-bottom:60px">
 <h1 id="pgTitle" style="font-size:clamp(30px,6vw,42px);text-align:left;margin-bottom:6px"></h1>
