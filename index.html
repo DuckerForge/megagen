@@ -19,14 +19,14 @@ background:repeating-conic-gradient(from 0deg,rgba(27,255,155,.13) 0deg 6deg,tra
 .nav,main,.footer{position:relative;z-index:1}
 .hero__title{text-shadow:0 0 44px rgba(27,255,155,.14)}
 .card__ico{font-size:30px}
-.grad{background:linear-gradient(100deg,#1BFF9B,#C77DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad{color:#1BFF9B}@supports ((-webkit-background-clip:text) or (background-clip:text)){.grad{background:linear-gradient(100deg,#1BFF9B,#C77DFF);-webkit-background-clip:text;background-clip:text;color:transparent}}
 .pill__dot{background:#1BFF9B}
 .langsel{background:var(--card);color:var(--txt);border:1px solid var(--line-solid);border-radius:12px;padding:8px 12px;font:600 13px Inter,sans-serif;cursor:pointer}
 /* MEGAGEN phone mockup UI */
 .mg-screen{display:flex;flex-direction:column;gap:10px;padding:12px}
 .mg-bar{display:flex;align-items:center;gap:8px;font:700 14px 'Space Grotesk',sans-serif}
 .mg-bar img{width:24px;height:24px;border-radius:7px}
-.mg-bar .gn{background:linear-gradient(100deg,#1BFF9B,#C77DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mg-bar .gn{color:#1BFF9B}
 .mg-risks{display:flex;gap:7px}
 .mg-risk{flex:1;text-align:center;padding:9px 4px;border-radius:13px;background:#16121f;border:1px solid #262634;font:800 11px Inter;color:#9a9aab}
 .mg-risk.on{border-color:#FFD23F;color:#FFD23F;background:rgba(255,210,63,.08)}
